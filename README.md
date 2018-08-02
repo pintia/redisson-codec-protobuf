@@ -11,6 +11,6 @@ Redisson codec for protobuf
         maven { url "https://jitpack.io" }
    }
    dependencies {
-         implementation 'com.github.jitpack:gradle-simple:3.7.5'
+         implementation 'com.github.pintia:redisson-codec-protobuf:v3.7.5'
    }
 ```
