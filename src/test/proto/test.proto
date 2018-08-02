@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package test.proto;
+
+option java_package = "cn.patest.proto.test";
+option java_outer_classname = "TestProtos";
+
+import "google/protobuf/timestamp.proto";
+
+message TestMessage {
+    int64 id = 1;
+    string name = 2;
+}
+
+message NestedMessage {
+    TestMessage nested = 1;
+    int64 id = 2;
+    string name = 3;
+}

@@ -1,0 +1,113 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'idea'
+apply plugin: 'com.google.protobuf'
+apply plugin: 'jacoco'
+
+// Java compatibility.
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+buildscript {
+	ext {
+		// Global version variable.
+		kotlinVersion = '1.2.51'
+        codecVersion = '3.7.5'
+	}
+	repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.3'
+	}
+}
+
+repositories {
+    jcenter()
+    maven { url 'https://jitpack.io' }
+}
+
+// Add Kotlin and protobuf generated codes into source sets.
+sourceSets {
+	main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += file("${protobuf.generatedFilesBaseDir}/test/java")
+    test.java.srcDirs += file("${protobuf.generatedFilesBaseDir}/test/grpc")
+}
+
+dependencies {
+	// Kotlin
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    // Protocol Buffer
+	compile 'com.google.protobuf:protobuf-java:3.4.0'
+	// Redisson, codec and hashing algorithm
+	compile 'de.ruedigermoeller:fst:2.56'
+	compile 'org.redisson:redisson:3.7.5'
+    implementation "com.github.pintia:redisson-codec-protobuf:$codecVersion"
+
+    testCompile 'org.xerial.snappy:snappy-java:1.1.7'
+    testCompile 'io.kotlintest:kotlintest-runner-junit5:3.1.7'
+    testCompile "org.assertj:assertj-core:3.10.0"
+}
+
+compileKotlin {
+	kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+		apiVersion = "1.2"
+		languageVersion = "1.2"
+		javaParameters = true
+	}
+}
+compileTestKotlin {
+    dependsOn('generateTestProto')
+	kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+		apiVersion = "1.2"
+		languageVersion = "1.2"
+		javaParameters = true
+	}
+}
+test {
+    useJUnitPlatform()
+}
+
+protobuf {
+	protoc {
+		// The artifact spec for the Protobuf Compiler
+		artifact = 'com.google.protobuf:protoc:3.6.1'
+	}
+	// https://github.com/google/protobuf/issues/2054
+	generateProtoTasks {
+		all().each { task ->
+			task.doLast {
+				ant.replaceregexp(
+						match: '@java.lang.Deprecated|@deprecated',
+						replace: '',
+						flags: 'g',
+						byline: true
+				) {
+					fileset(dir: "${protobuf.generatedFilesBaseDir}/test/java")
+				}
+			}
+		}
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.1"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled true
+		html.enabled true
+	}
+}
+
+idea {
+	module {
+		sourceDirs += file("src/test/proto")
+	}
+}
