@@ -16,7 +16,6 @@ buildscript {
 	}
 	repositories {
         jcenter()
-        maven { url 'https://jitpack.io' }
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
@@ -26,7 +25,6 @@ buildscript {
 
 repositories {
     jcenter()
-    maven { url 'https://jitpack.io' }
 }
 
 // Add Kotlin and protobuf generated codes into source sets.
@@ -44,7 +42,6 @@ dependencies {
 	// Redisson, codec and hashing algorithm
 	compile 'de.ruedigermoeller:fst:2.56'
 	compile 'org.redisson:redisson:3.7.5'
-    implementation "com.github.pintia:redisson-codec-protobuf:$codecVersion"
 
     testCompile 'org.xerial.snappy:snappy-java:1.1.7'
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.1.7'
