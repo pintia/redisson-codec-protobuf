@@ -13,8 +13,8 @@ group = 'com.github.pintia'
 buildscript {
 	ext {
 		// Global version variable.
-		kotlinVersion = '1.2.51'
-        codecVersion = '3.7.5'
+		kotlinVersion = '1.3.10'
+        codecVersion = '2.14.1'
 	}
 	repositories {
         jcenter()
@@ -58,9 +58,9 @@ dependencies {
 	compile 'com.google.protobuf:protobuf-java:3.4.0'
 	// Redisson, codec and hashing algorithm
 	compile 'de.ruedigermoeller:fst:2.56'
-	compile 'org.redisson:redisson:3.7.5'
+	compile 'org.redisson:redisson:2.14.1'
 
-    testCompile 'org.xerial.snappy:snappy-java:1.1.7'
+    testCompile 'org.xerial.snappy:snappy-java:1.1.7.2'
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.1.7'
     testCompile "org.assertj:assertj-core:3.10.0"
 }
@@ -68,8 +68,8 @@ dependencies {
 compileKotlin {
 	kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
-		apiVersion = "1.2"
-		languageVersion = "1.2"
+		apiVersion = "1.3"
+		languageVersion = "1.3"
 		javaParameters = true
 	}
 }
@@ -77,8 +77,8 @@ compileTestKotlin {
     dependsOn('generateTestProto')
 	kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
-		apiVersion = "1.2"
-		languageVersion = "1.2"
+		apiVersion = "1.3"
+		languageVersion = "1.3"
 		javaParameters = true
 	}
 }
