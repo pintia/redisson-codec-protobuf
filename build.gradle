@@ -14,10 +14,10 @@ buildscript {
 	ext {
 		// Global version variable.
 		kotlinVersion = '1.3.10'
-        codecVersion = '2.14.1'
+        codecVersion = '3.10.2'
 	}
 	repositories {
-        jcenter()
+		jcenter()
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
@@ -58,7 +58,7 @@ dependencies {
 	compile 'com.google.protobuf:protobuf-java:3.4.0'
 	// Redisson, codec and hashing algorithm
 	compile 'de.ruedigermoeller:fst:2.56'
-	compile 'org.redisson:redisson:2.14.1'
+	compile "org.redisson:redisson:${codecVersion}"
 
     testCompile 'org.xerial.snappy:snappy-java:1.1.7.2'
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.1.7'
@@ -90,21 +90,6 @@ protobuf {
 	protoc {
 		// The artifact spec for the Protobuf Compiler
 		artifact = 'com.google.protobuf:protoc:3.6.1'
-	}
-	// https://github.com/google/protobuf/issues/2054
-	generateProtoTasks {
-		all().each { task ->
-			task.doLast {
-				ant.replaceregexp(
-						match: '@java.lang.Deprecated|@deprecated',
-						replace: '',
-						flags: 'g',
-						byline: true
-				) {
-					fileset(dir: "${protobuf.generatedFilesBaseDir}/test/java")
-				}
-			}
-		}
 	}
 }
 
