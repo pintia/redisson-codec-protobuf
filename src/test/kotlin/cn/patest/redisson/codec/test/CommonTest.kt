@@ -1,17 +1,33 @@
 package cn.patest.redisson.codec.test
 
 import cn.patest.redisson.codec.ProtobufCodec
-import io.kotlintest.specs.StringSpec
+import org.junit.*
 import org.redisson.codec.SnappyCodec
+import org.testcontainers.containers.GenericContainer
 
-class CommonTest : StringSpec({
+class CommonTest {
 
-    "not protobuf object" {
-        TestUtil.runTest(ProtobufCodec())
+    @Before
+    fun before() {
+        container.start()
     }
 
-    "not protobuf and snappy" {
-        TestUtil.runTest(SnappyCodec(ProtobufCodec()))
+    @After
+    fun after() {
+        container.stop()
     }
 
-})
+    @Test
+    fun notProtobufObject() {
+        TestUtil.runTest(ProtobufCodec(), container.containerIpAddress, container.firstMappedPort)
+    }
+
+    @Test
+    fun notProtobufAndSnappy() {
+        TestUtil.runTest(SnappyCodec(ProtobufCodec()), container.containerIpAddress, container.firstMappedPort)
+    }
+
+    val container = KGenericContainer("redis:5.0.3-alpine").withExposedPorts(6379)
+
+    class KGenericContainer(name: String) : GenericContainer<KGenericContainer>(name)
+}

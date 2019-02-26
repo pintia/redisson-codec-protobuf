@@ -9,6 +9,8 @@ import java.nio.ByteBuffer
 
 class ProtobufCodec(private val innerCodec: Codec = FstCodec()) : BaseCodec() {
 
+    constructor(classLoader: ClassLoader, codec: ProtobufCodec): this(copy(classLoader, codec.innerCodec))
+
     private val BYTES_INT = java.lang.Integer.BYTES
     private val EMPTY_INT_BYTES_ARRAY = ByteArray(BYTES_INT)
 
