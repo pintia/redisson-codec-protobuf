@@ -1,6 +1,6 @@
 language: java
 services:
-  - redis-server
+    - docker
 script:
   - ./gradlew test jacocoTestReport
 

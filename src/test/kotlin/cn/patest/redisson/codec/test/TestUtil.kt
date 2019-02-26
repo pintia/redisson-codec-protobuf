@@ -31,10 +31,10 @@ object TestUtil {
             .setId(id + 100)
             .setName(name + "100")).build()
 
-    fun runTest(codec: BaseCodec) {
+    fun runTest(codec: BaseCodec, ipAddr: String, port: Int) {
         val redisson = Redisson.create(Config().also {
             it.codec = codec
-            it.useSingleServer().setAddress("redis://127.0.0.1:6379")
+            it.useSingleServer().setAddress("redis://$ipAddr:$port")
         })
 
         val map = redisson.getMap<Int, Map<String, Any>>("getAll")
